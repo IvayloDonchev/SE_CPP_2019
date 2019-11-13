@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstring>
+#include <ctime>
 using namespace std;
+
 
 class Person
 {
@@ -14,7 +16,8 @@ public:
 	Person(const Person&);				// copy constructor
 	Person& operator=(const Person&);	// copy assignment
 	~Person();
-	void Show();
+	void Show() const;
+	int Age() const;
 };
 
 Person::Person(const char n[], const char a[], int y)
@@ -59,9 +62,19 @@ Person& Person::operator=(const Person& other)
 	year = other.year;
 	return *this;
 }
-void Person::Show()
+void Person::Show() const
 {
-	std::cout << name << ", " << address << ", " << year << std::endl;
+	std::cout << name << ", " << address << ", born " << year 
+		      << " (" << Age() << " years old)\n";
+}
+
+int Person::Age() const
+{
+	time_t now = std::time(0);   // времето в секунди от 01.01.1970 насам
+	tm pt;	// Structure containing a calendar date and time broken down into its components.
+	localtime_s(&pt,&now);	// Convert time_t to tm as local time
+	int this_year = pt.tm_year + 1900;
+	return this_year - year;
 }
 
 class Car
@@ -77,7 +90,7 @@ public:
 	~Car();
 	Car(const Car&);			// copy constructor
 	Car& operator=(const Car&);
-	void Show();
+	void Show() const;
 };
 
 Car::Car(const char mod[], const char reg[], int yc, 
@@ -125,7 +138,7 @@ Car& Car::operator=(const Car& other)
 	return *this;
 }
 
-void Car::Show()
+void Car::Show() const
 {
 	cout << "Car model: " << model << endl;
 	cout << "Reg. number: " << registration << endl;
@@ -136,6 +149,10 @@ void Car::Show()
 
 int main()
 {
+	Person Ivaylo{ "Ivaylo Donchev", "V.T.", 1971 };
+	Ivaylo.Show();
+	cout << endl;
+
 	Car c("Opel Corsa", "BT 1234 TB", 1993, "Ivan Ivanov", "V.T.", 2000);
 	c.Show();
 
