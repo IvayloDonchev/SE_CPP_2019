@@ -3,6 +3,13 @@
 #include <ctime>
 using namespace std;
 
+template <class T>
+void swap(T& a, T& b)
+{
+	T buf{ move(a) };		
+	a = move(b);			
+	b = move(buf);		
+}
 
 class Person
 {
@@ -15,6 +22,8 @@ public:
 	Person(const char[], const char[], int);
 	Person(const Person&);				// copy constructor
 	Person& operator=(const Person&);	// copy assignment
+	Person(Person&&);					// move constructor
+	Person& operator=(Person&&);		// move assignment
 	~Person();
 	void Show() const;
 	int Age() const;
@@ -41,6 +50,14 @@ Person::Person(const Person& other)
 	strcpy_s(address, n, other.address);
 	this->year = other.year;
 }
+Person::Person(Person&& other) : name(move(other.name)),
+                                 address(move(other.address)),
+	                             year(move(other.year))
+{
+	other.name = nullptr;
+	other.address = nullptr;
+	other.year = 0;
+}
 
 Person::~Person() {
 	if (name) delete[] name;
@@ -60,6 +77,21 @@ Person& Person::operator=(const Person& other)
 	address = new char[n];
 	strcpy_s(address, n, other.address);
 	year = other.year;
+	return *this;
+}
+
+Person& Person::operator=(Person&& other)
+{
+	if (this == &other)			// self assignment
+		return *this;
+	if (name != nullptr) delete[] name;
+	name = move(other.name);
+	if (address != nullptr) delete[] address;
+	address = move(other.address);
+	year = move(other.year);
+	other.name = nullptr;
+	other.address = nullptr;
+	other.year = 0;
 	return *this;
 }
 void Person::Show() const
@@ -89,7 +121,9 @@ public:
 	Car(const char[], const char[], int, const char[], const char[], int);
 	~Car();
 	Car(const Car&);			// copy constructor
-	Car& operator=(const Car&);
+	Car& operator=(const Car&); // copy assignment
+	Car(Car&&);					// move constructor
+	Car& operator=(Car&&);		// move assignment
 	void Show() const;
 };
 
@@ -122,6 +156,16 @@ Car::Car(const Car& other) : owner(other.owner)
 	year = other.year;
 }
 
+Car::Car(Car&& other) : owner(move(other.owner)),
+                        model(move(other.model)),
+	                    registration(move(other.registration)),
+	                    year(move(other.year))
+{
+	other.model = nullptr;
+	other.registration = nullptr;
+	other.year = 0;
+}
+
 Car& Car::operator=(const Car& other)
 {
 	if (this == &other) return *this;
@@ -138,6 +182,21 @@ Car& Car::operator=(const Car& other)
 	return *this;
 }
 
+Car& Car::operator=(Car&& other)
+{
+	if (this == &other) return *this;
+	if (model) delete[] model;
+	model = move(other.model);
+	if (registration) delete[] registration;
+	registration = move(other.registration);
+	year = move(other.year);
+	owner = move(other.owner);
+	other.model = nullptr;
+	other.registration = nullptr;
+	other.year = 0;
+	return *this;
+}
+
 void Car::Show() const
 {
 	cout << "Car model: " << model << endl;
@@ -149,18 +208,20 @@ void Car::Show() const
 
 int main()
 {
-	Person Ivaylo{ "Ivaylo Donchev", "V.T.", 1971 };
-	Ivaylo.Show();
-	cout << endl;
+	//Person Ivaylo{ "Ivaylo Donchev", "V.T.", 1971 };
+	//Ivaylo.Show();
+	//
+	//Person p{ move(Ivaylo) };	// move constructor
+	//p.Show();
+	//
+	//Person p2;		// default constructor
+	//p2 = move(p);	// move assignment operator
+	//p2.Show();
 
-	Car c("Opel Corsa", "BT 1234 TB", 1993, "Ivan Ivanov", "V.T.", 2000);
-	c.Show();
-
-	Car c2{ c };	// copy construction
+	Car c1{ "Opel Corsa","BT 4567 AB", 1998,"Petar","V.T.",1994 };
+	c1.Show();
+	Car c2;
+	c2 = move(c1);
 	c2.Show();
-
-	Car c3;			// default constructor
-	c3 = c;			// copy assignment
-	c3.Show();
 
 }
