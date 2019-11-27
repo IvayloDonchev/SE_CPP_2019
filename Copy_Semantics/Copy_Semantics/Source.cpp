@@ -20,10 +20,10 @@ private:
 public:
 	Person() : name(nullptr), address(nullptr), year(0) {}
 	Person(const char[], const char[], int);
-	Person(const Person&);				// copy constructor
-	Person& operator=(const Person&);	// copy assignment
-	Person(Person&&);					// move constructor
-	Person& operator=(Person&&);		// move assignment
+	Person(const Person&);						// copy constructor
+	Person& operator=(const Person&);			// copy assignment
+	Person(Person&&) noexcept;					// move constructor
+	Person& operator=(Person&&) noexcept;		// move assignment
 	~Person();
 	void Show() const;
 	int Age() const;
@@ -50,7 +50,7 @@ Person::Person(const Person& other)
 	strcpy_s(address, n, other.address);
 	this->year = other.year;
 }
-Person::Person(Person&& other) : name(move(other.name)),
+Person::Person(Person&& other) noexcept : name(move(other.name)),
                                  address(move(other.address)),
 	                             year(move(other.year))
 {
@@ -80,7 +80,7 @@ Person& Person::operator=(const Person& other)
 	return *this;
 }
 
-Person& Person::operator=(Person&& other)
+Person& Person::operator=(Person&& other) noexcept
 {
 	if (this == &other)			// self assignment
 		return *this;
@@ -120,10 +120,10 @@ public:
 	Car() :model(nullptr), registration(nullptr), year(0), owner() {}
 	Car(const char[], const char[], int, const char[], const char[], int);
 	~Car();
-	Car(const Car&);			// copy constructor
-	Car& operator=(const Car&); // copy assignment
-	Car(Car&&);					// move constructor
-	Car& operator=(Car&&);		// move assignment
+	Car(const Car&);					// copy constructor
+	Car& operator=(const Car&);			// copy assignment
+	Car(Car&&) noexcept;				// move constructor
+	Car& operator=(Car&&) noexcept;		// move assignment
 	void Show() const;
 };
 
@@ -156,7 +156,7 @@ Car::Car(const Car& other) : owner(other.owner)
 	year = other.year;
 }
 
-Car::Car(Car&& other) : owner(move(other.owner)),
+Car::Car(Car&& other) noexcept : owner(move(other.owner)),
                         model(move(other.model)),
 	                    registration(move(other.registration)),
 	                    year(move(other.year))
@@ -182,7 +182,7 @@ Car& Car::operator=(const Car& other)
 	return *this;
 }
 
-Car& Car::operator=(Car&& other)
+Car& Car::operator=(Car&& other) noexcept
 {
 	if (this == &other) return *this;
 	if (model) delete[] model;
