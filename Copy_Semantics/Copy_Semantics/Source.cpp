@@ -206,6 +206,91 @@ void Car::Show() const
 	owner.Show();
 }
 
+class Student : public Person
+{
+private:
+	int fn;			// факултетен номер
+	char* program;	// специалност
+	int year;		// курс
+public:
+	Student() = default;
+	~Student();
+	Student(const char*, const char*, int, int, const char*, int);
+	Student(const Student&);			// копиращ конструктор
+	Student& operator=(const Student&);	// копиращо присвояване
+	Student(Student&&);					// преместващ конструктор
+	Student& operator=(Student&&);		// преместващо присвояване
+	void Show() const;
+};
+
+Student::~Student()
+{
+	if (program) delete[] program;
+}
+
+Student::Student(const char* n, const char* a, int y, int f, const char* p, int c) : 
+	Person(n,a,y)
+{
+	fn = f;
+	size_t len = strlen(p) + 1;
+	program = new char[len];
+	strcpy_s(program, len, p);
+	year = c;
+}
+
+Student::Student(const Student& other) : Person(other)
+{
+	fn = other.fn;
+	size_t len = strlen(other.program) + 1;
+	program = new char[len];
+	strcpy_s(program, len, other.program);
+	year = other.year;
+}
+
+Student& Student::operator=(const Student& other)
+{
+	if (this == &other) return *this;
+	Person::operator=(other);
+	fn = other.fn;
+	size_t len = strlen(other.program) + 1;
+	if (program) delete[] program;
+	program = new char[len];
+	strcpy_s(program, len, other.program);
+	year = other.year;
+	return *this;
+}
+
+Student::Student(Student&& other) : Person(move(other))
+{
+	fn = move(other.fn);
+	program = move(other.program);
+	year = move(other.year);
+	other.fn = 0;
+	other.program = nullptr;
+	other.year = 0;
+}
+
+Student& Student::operator=(Student&& other)
+{
+	if (this == &other) return *this;
+	Person::operator=(move(other));
+	fn = move(other.fn);
+	if (program) delete[] program;
+	program = move(other.program);
+	year = move(other.year);
+	other.fn = 0;
+	other.program = nullptr;
+	other.year = 0;
+	return *this;
+}
+
+void Student::Show() const
+{
+	Person::Show();
+	cout << "Fac. No: " << fn << endl;
+	cout << "Program: " << program << endl;
+	cout << "Course: " << year << endl;
+}
 int main()
 {
 	//Person Ivaylo{ "Ivaylo Donchev", "V.T.", 1971 };
@@ -218,10 +303,22 @@ int main()
 	//p2 = move(p);	// move assignment operator
 	//p2.Show();
 
-	Car c1{ "Opel Corsa","BT 4567 AB", 1998,"Petar","V.T.",1994 };
+	/*Car c1{ "Opel Corsa","BT 4567 AB", 1998,"Petar","V.T.",1994 };
 	c1.Show();
 	Car c2;
 	c2 = move(c1);
-	c2.Show();
+	c2.Show();*/
+
+	Student s{ "Ivan Ivanov", "V.T.", 2000, 12345, "Software Engineering", 2 };
+	s.Show();
+	Student s2{ s };		// copy constructor
+	s2.Show();
+	Student s3;
+	s3 = s;					// copy assignment
+	s3.Show();
+	Student s4{ move(s) };	// move constructor
+	s4.Show();
+	s3 = move(s4);			// move assignment
+	s3.Show();
 
 }
