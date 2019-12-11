@@ -4,7 +4,7 @@ using namespace std;
 class Horse
 {
 public:
-	Horse() {
+	Horse() : age(0) {
 		cout << "Horse constructor...\n";
 	}
 	virtual ~Horse() {
@@ -20,7 +20,7 @@ private:
 class Bird
 {
 public:
-	Bird() {
+	Bird() : weight(0) {
 		cout << "Bird constructor...\n";
 	}
 	virtual ~Bird() {
@@ -52,7 +52,7 @@ public:
 
 int main()
 {
-	const int n = 2;
+	const int n = 3;
 	Horse* Ranch[n];
 	Bird* Aviary[n];
 	Horse* pHorse;
@@ -73,5 +73,21 @@ int main()
 		cout << "Ranch[" << i << "]: ";
 		Ranch[i]->Whinny();
 		delete Ranch[i];
+	}
+	for (i = 0; i < n; i++)
+	{
+		cout << "\n(1) Bird   (2) Pegasus: ";
+		cin >> choice;
+		if (choice == 2)
+			pBird = new Pegasus;
+		else
+			pBird= new Bird;
+		Aviary[i] = pBird;
+	}
+	for (i = 0; i < n; i++)
+	{
+		cout << "Aviary[" << i << "]: ";
+		Aviary[i]->Chirp();
+		delete Aviary[i];
 	}
 }
