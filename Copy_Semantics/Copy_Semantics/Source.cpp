@@ -213,13 +213,13 @@ private:
 	char* program;	// специалност
 	int year;		// курс
 public:
-	Student() = default;
+	Student() : fn(0), program(nullptr), year(0) {};
 	~Student();
 	Student(const char*, const char*, int, int, const char*, int);
-	Student(const Student&);			// копиращ конструктор
-	Student& operator=(const Student&);	// копиращо присвояване
-	Student(Student&&);					// преместващ конструктор
-	Student& operator=(Student&&);		// преместващо присвояване
+	Student(const Student&) noexcept;				// копиращ конструктор
+	Student& operator=(const Student&) noexcept;	// копиращо присвояване
+	Student(Student&&) noexcept;					// преместващ конструктор
+	Student& operator=(Student&&) noexcept;			// преместващо присвояване
 	void Show() const;
 };
 
@@ -238,7 +238,7 @@ Student::Student(const char* n, const char* a, int y, int f, const char* p, int 
 	year = c;
 }
 
-Student::Student(const Student& other) : Person(other)
+Student::Student(const Student& other) noexcept : Person(other)
 {
 	fn = other.fn;
 	size_t len = strlen(other.program) + 1;
@@ -247,7 +247,7 @@ Student::Student(const Student& other) : Person(other)
 	year = other.year;
 }
 
-Student& Student::operator=(const Student& other)
+Student& Student::operator=(const Student& other) noexcept
 {
 	if (this == &other) return *this;
 	Person::operator=(other);
@@ -260,7 +260,7 @@ Student& Student::operator=(const Student& other)
 	return *this;
 }
 
-Student::Student(Student&& other) : Person(move(other))
+Student::Student(Student&& other) noexcept : Person(move(other))
 {
 	fn = move(other.fn);
 	program = move(other.program);
@@ -270,7 +270,7 @@ Student::Student(Student&& other) : Person(move(other))
 	other.year = 0;
 }
 
-Student& Student::operator=(Student&& other)
+Student& Student::operator=(Student&& other) noexcept
 {
 	if (this == &other) return *this;
 	Person::operator=(move(other));
