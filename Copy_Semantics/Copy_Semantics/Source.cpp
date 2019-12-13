@@ -117,7 +117,7 @@ private:
 	int year;
 	Person owner;
 public:
-	Car() :model(nullptr), registration(nullptr), year(0), owner() {}
+	Car() : model(nullptr), registration(nullptr), year(0), owner() {}
 	Car(const char[], const char[], int, const char[], const char[], int);
 	~Car();
 	Car(const Car&);					// copy constructor
@@ -216,8 +216,8 @@ public:
 	Student() : fn(0), program(nullptr), year(0) {};
 	~Student();
 	Student(const char*, const char*, int, int, const char*, int);
-	Student(const Student&) noexcept;				// копиращ конструктор
-	Student& operator=(const Student&) noexcept;	// копиращо присвояване
+	Student(const Student&);				// копиращ конструктор
+	Student& operator=(const Student&) ;	// копиращо присвояване
 	Student(Student&&) noexcept;					// преместващ конструктор
 	Student& operator=(Student&&) noexcept;			// преместващо присвояване
 	void Show() const;
@@ -238,7 +238,7 @@ Student::Student(const char* n, const char* a, int y, int f, const char* p, int 
 	year = c;
 }
 
-Student::Student(const Student& other) noexcept : Person(other)
+Student::Student(const Student& other) : Person(other)
 {
 	fn = other.fn;
 	size_t len = strlen(other.program) + 1;
@@ -247,7 +247,7 @@ Student::Student(const Student& other) noexcept : Person(other)
 	year = other.year;
 }
 
-Student& Student::operator=(const Student& other) noexcept
+Student& Student::operator=(const Student& other)
 {
 	if (this == &other) return *this;
 	Person::operator=(other);
