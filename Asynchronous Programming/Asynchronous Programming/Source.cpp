@@ -44,40 +44,40 @@ void quick_sort(vector<T>& v) {
 }
 
 
-int main() {
-    vector<int> v;
-    int n;
-    cout << "n = "; cin >> n;
-    v.reserve(n);
-    while (n--) {
-        int a;
-        cout << ">> "; cin >> a;
-        v.push_back(a);
-    }
+//int main() {
+//    vector<int> v;
+//    int n;
+//    cout << "n = "; cin >> n;
+//    v.reserve(n);
+//    while (n--) {
+//        int a;
+//        cout << ">> "; cin >> a;
+//        v.push_back(a);
+//    }
+//
+//    auto start = std::chrono::high_resolution_clock::now();
+//
+//    quick_sort<int>(v);
+//
+//    auto end = std::chrono::high_resolution_clock::now();
+//    std::chrono::duration<double, std::milli> elapsed = end - start;
+//    std::cout << "Elapsed time " << elapsed.count() << " ms\n";
+//    
+//    for (auto& x : v) cout << x << ' ';
+//    cout << '\n';
+//
+//    for (unsigned i = 0; i < v.size() - 1; i++) {
+//        if (v[i] != i + 1) {
+//            cerr << "Huston we have a problem" << endl;
+//            cerr << v[i] << " " << v[i + 1] << endl;
+//            return 0;
+//        }
+//    }
+//
+//    return 0;
+//}
 
-    auto start = std::chrono::high_resolution_clock::now();
 
-    quick_sort<int>(v);
-
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double, std::milli> elapsed = end - start;
-    std::cout << "Elapsed time " << elapsed.count() << " ms\n";
-    
-    for (auto& x : v) cout << x << ' ';
-    cout << '\n';
-
-    for (unsigned i = 0; i < v.size() - 1; i++) {
-        if (v[i] != i + 1) {
-            cerr << "Huston we have a problem" << endl;
-            cerr << v[i] << " " << v[i + 1] << endl;
-            return 0;
-        }
-    }
-
-    return 0;
-}
-
-/*
 double T1(){
     std::cout << "T1 : start" << std::endl;
     std::this_thread::sleep_for(std::chrono::seconds(5));
@@ -115,4 +115,4 @@ int main(){
     std::chrono::duration<double, std::milli> elapsed = end-start;
     std::cout << "Elapsed time " << elapsed.count() << " ms\n";
     return 0;
-}*/
+}
