@@ -98,7 +98,12 @@ unsigned Fib(unsigned n)
     auto future1 = std::async(Fib,n-1);
     auto future2 = std::async(Fib, n-2);
     return future1.get() + future2.get();
-    return Fib(n - 1) + Fib(n - 2);
+}
+
+// a non-optimized way of checking for prime numbers:
+bool is_prime(int x) {
+    for (int i = 2; i < x; ++i) if (x % i == 0) return false;
+    return true;
 }
 
 void T3(double arg1, int arg2){
@@ -123,6 +128,19 @@ int main(){
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double, std::milli> elapsed = end-start;
     std::cout << "Elapsed time " << elapsed.count() << " ms\n";
+
+    // call function asynchronously:
+    std::future<bool> fut = std::async(is_prime, 444444443);
+
+    // do something while waiting for function to set future:
+    std::cout << "checking, please wait";
+    std::chrono::milliseconds span(100);
+    while (fut.wait_for(span) == std::future_status::timeout)
+        std::cout << '.' << std::flush;
+
+    bool x = fut.get();     // retrieve return value
+
+    std::cout << "\n444444443 " << (x ? "is" : "is not") << " prime.\n";
     return 0;
 }
 
