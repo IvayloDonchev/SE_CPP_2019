@@ -46,13 +46,12 @@ void quick_sort(vector<T>& v) {
 
 int main() {
     vector<int> v;
-
     int n;
-    cin >> n;
+    cout << "n = "; cin >> n;
     v.reserve(n);
     while (n--) {
         int a;
-        cin >> a;
+        cout << ">> "; cin >> a;
         v.push_back(a);
     }
 
@@ -63,10 +62,11 @@ int main() {
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double, std::milli> elapsed = end - start;
     std::cout << "Elapsed time " << elapsed.count() << " ms\n";
-
+    
+    for (auto& x : v) cout << x << ' ';
+    cout << '\n';
 
     for (unsigned i = 0; i < v.size() - 1; i++) {
-
         if (v[i] != i + 1) {
             cerr << "Huston we have a problem" << endl;
             cerr << v[i] << " " << v[i + 1] << endl;
