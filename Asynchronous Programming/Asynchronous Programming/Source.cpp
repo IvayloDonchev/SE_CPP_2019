@@ -100,6 +100,19 @@ unsigned Fib(unsigned n)
     return future1.get() + future2.get();
 }
 
+unsigned Fib_iter(unsigned n)
+{
+    unsigned a{ 0 }, b{ 1 }, c{ 1 };
+    if (n < 2) return n;
+    for (int i = 2; i <= n; ++i)
+    {
+        c = a + b;
+        a = b;
+        b = c;
+    }
+    return c;
+}
+
 // a non-optimized way of checking for prime numbers:
 bool is_prime(int x) {
     for (int i = 2; i < x; ++i) if (x % i == 0) return false;
@@ -114,7 +127,7 @@ void T3(double arg1, int arg2){
 
 int main(){
 
-    auto start = std::chrono::high_resolution_clock::now();
+   /* auto start = std::chrono::high_resolution_clock::now();
 
     std::cout << "I'm the main thread: start" << std::endl;
     {
@@ -127,7 +140,7 @@ int main(){
 
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double, std::milli> elapsed = end-start;
-    std::cout << "Elapsed time " << elapsed.count() << " ms\n";
+    std::cout << "Elapsed time " << elapsed.count() << " ms\n";*/
 
     // call function asynchronously:
     std::future<bool> fut = std::async(is_prime, 444444443);
@@ -141,6 +154,17 @@ int main(){
     bool x = fut.get();     // retrieve return value
 
     std::cout << "\n444444443 " << (x ? "is" : "is not") << " prime.\n";
+
+    auto fib_future = std::async(Fib, 12);
+    while (fib_future.wait_for(span) == std::future_status::timeout)
+        std::cout << '.' << std::flush;
+    cout << "\nFib = " << fib_future.get() << '\n';
+
+    fib_future = std::async(Fib_iter, 200);
+    while (fib_future.wait_for(span) == std::future_status::timeout)
+        std::cout << '.' << std::flush;
+    cout << "\nFib = " << fib_future.get() << '\n';
+
     return 0;
 }
 
