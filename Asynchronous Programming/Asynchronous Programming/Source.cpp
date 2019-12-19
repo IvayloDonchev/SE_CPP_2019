@@ -92,6 +92,15 @@ int T2(){
     return 444;
 }
 
+unsigned Fib(unsigned n)
+{
+    if (n < 2) return n;
+    auto future1 = std::async(Fib,n-1);
+    auto future2 = std::async(Fib, n-2);
+    return future1.get() + future2.get();
+    return Fib(n - 1) + Fib(n - 2);
+}
+
 void T3(double arg1, int arg2){
     std::cout << "T3 : start" << std::endl;
     std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -116,3 +125,4 @@ int main(){
     std::cout << "Elapsed time " << elapsed.count() << " ms\n";
     return 0;
 }
+
