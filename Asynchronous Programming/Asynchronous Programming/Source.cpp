@@ -8,7 +8,6 @@
 
 using namespace std;
 
-
 template <typename T>
 void filter(const vector<T>& v, vector<T>& lesser, const int pivot) {
     for (const auto el : v) {
