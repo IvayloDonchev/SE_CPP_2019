@@ -1,10 +1,5 @@
-#include <algorithm>
-#include <chrono>
-#include <functional>
 #include <future>
 #include <iostream>
-#include <thread>
-#include <vector>
 
 using namespace std;
 
@@ -20,3 +15,4 @@ int main()
 		});
 	cout << '\n';
 }
+
